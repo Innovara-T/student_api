@@ -1,9 +1,9 @@
 const express = require('express');
 const app = express();
-const port = 4000;
+const PORT = process.env.PORT || 4000;
 
-app.listen(port, () => {
-    console.log(`server is running on port ${port}`);
+app.listen(PORT, () => {
+    console.log(`server is running on port ${PORT}`);
 })
 
 app.use(express.json());
@@ -11,8 +11,11 @@ const students = [];
 let nextStudentId = 1;
 app.post('/students', (req, res) => {
     // Handle POST request for creating a new student
-    const {name, age, grade} = req.body;
+    const { name, age, grade } = req.body;
     const newStudent = { name, age, grade, id: nextStudentId++ };
+    // if (name != typeof (String) || age != typeof (Number) || grade != typeof (String)) {
+    //     return res.status(400).json({ error: 'Invalid student data' });
+    // }
     students.push(newStudent);
     res.status(201).json(newStudent);
 });
@@ -45,7 +48,7 @@ app.put('/updatestudent/:id', (req, res) => {
 });
 
 app.delete('/deletestudent/:id', (req, res) => {
-    
+
     const studentId = parseInt(req.params.id);
     const studentIndex = students.findIndex(s => s.id === studentId);
     if (studentIndex === -1) {
